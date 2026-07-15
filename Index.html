@@ -1,64 +1,169 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyGradPath - Digital Design and Technology</title>
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS with Dark Mode Config -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Enable class-based dark mode
+        }
+    </script>
     
+    <!-- Script to prevent theme flash on load -->
+    <script>
+        const savedData = localStorage.getItem('mygradpath_local_data_v2');
+        let initialTheme = 'dark';
+        if (savedData) {
+            try {
+                const parsed = JSON.parse(savedData);
+                if (parsed.theme) initialTheme = parsed.theme;
+            } catch (e) {}
+        }
+        if (initialTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Sarabun:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Sarabun:wght@400;500;600;800&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Inter', 'Sarabun', sans-serif; }
-        .custom-scrollbar::-webkit-scrollbar { height: 8px; width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; border-left: 2px solid black; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #272B4A; border-radius: 0; border: 1px solid black; }
-        .animate-fade-in { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        body { 
+            font-family: 'Inter', 'Sarabun', sans-serif; 
+        }
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(116, 149, 232, 0.3); border-radius: 10px; }
+        .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Brutalism Utility Classes */
-        .brutal-box { border: 3px solid black; border-radius: 0.75rem; box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); background-color: white; transition: background-color 0.3s; }
-        .brutal-btn { border: 3px solid black; border-radius: 0.75rem; box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); font-weight: 900; transition: all 0.15s; }
-        .brutal-btn:active { transform: translate(4px, 4px); box-shadow: none; }
-        .brutal-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); }
-        .brutal-btn:disabled { opacity: 0.5; pointer-events: none; }
-        .brutal-input { width: 100%; border: 3px solid black; border-radius: 0.75rem; padding: 0.75rem; background-color: white; color: black; font-weight: 700; transition: all 0.3s; outline: none; }
-        .brutal-input:focus { box-shadow: 0 0 0 4px #FFBE5D; }
+        /* Modern Glassmorphism System - Light Mode (Default) */
+        .glass-panel { 
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(240, 245, 250, 0.6) 100%);
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.8); 
+            border-radius: 1.5rem; 
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05); 
+            transition: all 0.4s ease;
+        }
+        
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.6); 
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.8); 
+            border-radius: 1.25rem; 
+            transition: all 0.3s ease; 
+            box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.03);
+        }
+        .glass-card:hover { background: rgba(255, 255, 255, 0.9); }
+        
+        .glass-btn { 
+            background: linear-gradient(135deg, #7495E8 0%, #4A4585 100%); 
+            border-radius: 9999px; /* Pill shape */
+            color: white; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            box-shadow: 0 4px 15px rgba(116, 149, 232, 0.2); 
+        }
+        .glass-btn:hover:not(:disabled) { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(116, 149, 232, 0.4); 
+            background: linear-gradient(135deg, #8aa7f0 0%, #5b559e 100%);
+        }
+        .glass-btn:active:not(:disabled) { transform: translateY(1px); }
+        .glass-btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(100%); }
+        
+        .glass-btn-warning { 
+            background: linear-gradient(135deg, #FFBE5D 0%, #FFAE3D 100%); 
+            color: #121420; 
+            box-shadow: 0 4px 15px rgba(255, 190, 93, 0.25); 
+            border: none;
+        }
+        .glass-btn-warning:hover:not(:disabled) {
+            background: linear-gradient(135deg, #ffd085 0%, #ffbf5c 100%);
+            box-shadow: 0 6px 20px rgba(255, 190, 93, 0.4); 
+        }
+
+        .glass-input { 
+            width: 100%; 
+            background: rgba(255, 255, 255, 0.6); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            border-radius: 1rem; 
+            padding: 0.875rem; 
+            color: #1e293b; 
+            transition: all 0.3s; 
+            outline: none; 
+        }
+        .glass-input:focus { 
+            border-color: #7495E8; 
+            background: rgba(255, 255, 255, 0.9); 
+            box-shadow: 0 0 0 2px rgba(116, 149, 232, 0.2); 
+        }
+        .glass-input option { background-color: #ffffff; color: #1e293b; }
+
+        /* Glass Components - Dark Mode */
+        .dark .glass-panel { 
+            background: linear-gradient(135deg, rgba(74, 69, 133, 0.3) 0%, rgba(39, 43, 74, 0.5) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); 
+        }
+        .dark .glass-card { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            box-shadow: none;
+        }
+        .dark .glass-card:hover { background: rgba(255, 255, 255, 0.06); }
+        .dark .glass-input { 
+            background: rgba(0, 0, 0, 0.2); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            color: white; 
+        }
+        .dark .glass-input:focus { 
+            background: rgba(116, 149, 232, 0.05); 
+        }
+        .dark .glass-input option { background-color: #272B4A; color: white; }
     </style>
 </head>
-<body class="bg-[#121420] min-h-screen flex items-center justify-center selection:bg-[#4A4585] selection:text-white">
+<body class="min-h-screen flex items-center justify-center bg-[#cbd5e1] dark:bg-[#0b0c10] transition-colors duration-500 selection:bg-[#4A4585] selection:text-white">
 
     <!-- Mobile Mockup Container -->
-    <div class="bg-[#F4F4F0] text-black w-full min-h-screen sm:w-[430px] sm:min-h-[932px] sm:max-h-[932px] sm:rounded-[40px] sm:border-[12px] sm:border-[#000] sm:shadow-[20px_20px_0px_0px_rgba(39,43,74,1)] overflow-hidden relative flex flex-col">
+    <div class="bg-gradient-to-b from-[#F0F4F8] via-[#E2E8F0] to-[#CBD5E1] dark:from-[#272B4A] dark:via-[#1A1C30] dark:to-[#121420] text-gray-800 dark:text-white w-full min-h-screen sm:w-[430px] sm:min-h-[932px] sm:max-h-[932px] sm:rounded-[45px] sm:border-[8px] sm:border-[#94a3b8] dark:sm:border-[#0b0c10] sm:shadow-[0_0_60px_rgba(116,149,232,0.15)] overflow-hidden relative flex flex-col transition-colors duration-500">
         
         <!-- Header -->
-        <header class="pt-14 pb-4 px-6 bg-[#FFBE5D] border-b-[4px] border-black z-10 shadow-[0_4px_0_0_#000]">
-            <h1 class="font-black text-3xl tracking-tighter text-center uppercase text-black">
-                MyGrad<span class="text-white bg-black px-2 py-0.5 ml-1 border-2 border-black -skew-x-6 inline-block" style="-webkit-text-stroke: 1px black;">Path</span>
+        <header class="pt-14 pb-4 px-6 z-10">
+            <h1 class="font-black text-2xl tracking-wide text-center text-gray-800 dark:text-white flex items-center justify-center gap-2">
+                MyGrad<span class="text-[#F59E0B] dark:text-[#FFBE5D]">Path</span>
             </h1>
+            <p class="text-center text-xs text-[#3B82F6] dark:text-[#7495E8] opacity-80 mt-1">Digital Design and Technology</p>
         </header>
 
         <!-- Main Content -->
         <main id="mainContent" class="flex-1 overflow-y-auto custom-scrollbar relative z-0"></main>
 
         <!-- Bottom Navigation -->
-        <nav class="absolute bottom-0 w-full bg-[#272B4A] border-t-[4px] border-black pb-8 pt-4 px-2 z-20">
-            <div class="flex justify-around items-center" id="bottomNav">
+        <nav class="absolute bottom-0 w-full bg-white/80 dark:bg-[#1A1C30]/80 backdrop-blur-xl border-t border-black/5 dark:border-white/5 pb-8 pt-4 px-4 z-20">
+            <div class="flex justify-between items-center px-4" id="bottomNav">
                 <!-- Nav items injected by JS -->
             </div>
         </nav>
 
         <!-- Modals -->
-        <div id="formModalContainer" class="fixed inset-0 z-50 bg-[#F4F4F0] overflow-y-auto custom-scrollbar flex-col p-5 animate-fade-in hidden"></div>
-        <div id="aiModalContainer" class="fixed inset-0 z-[60] bg-black bg-opacity-50 flex items-center justify-center p-4 hidden"></div>
+        <div id="formModalContainer" class="fixed inset-0 z-50 bg-[#e2e8f0]/80 dark:bg-[#0b0c10]/80 backdrop-blur-md overflow-y-auto custom-scrollbar flex-col p-5 animate-fade-in hidden"></div>
+        <div id="aiModalContainer" class="fixed inset-0 z-[60] bg-[#e2e8f0]/80 dark:bg-[#0b0c10]/80 backdrop-blur-md flex items-center justify-center p-4 hidden"></div>
     </div>
 
     <!-- Application Logic -->
@@ -134,6 +239,7 @@
         // 2. STATE MANAGEMENT
         // ==========================================
         let state = {
+            theme: 'dark', // Add theme state
             activeTab: 'dashboard',
             courses: [],
             profile: { firstName: 'นักศึกษา', lastName: 'ใจดี', studentId: '67XXXXXXX' },
@@ -144,13 +250,14 @@
             aiAdvice: ""
         };
 
-        const LOCAL_STORAGE_KEY = 'mygradpath_local_data';
+        const LOCAL_STORAGE_KEY = 'mygradpath_local_data_v2';
 
         function loadData() {
             const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
             if (savedData) {
                 try {
                     const parsed = JSON.parse(savedData);
+                    if (parsed.theme) state.theme = parsed.theme;
                     if (parsed.courses) state.courses = parsed.courses;
                     if (parsed.profile) state.profile = parsed.profile;
                     if (parsed.conditions) state.conditions = parsed.conditions;
@@ -158,12 +265,28 @@
                     console.error("Failed to parse local data", e);
                 }
             }
+            applyTheme();
         }
 
         function saveData() {
-            const dataToSave = { courses: state.courses, profile: state.profile, conditions: state.conditions };
+            const dataToSave = { theme: state.theme, courses: state.courses, profile: state.profile, conditions: state.conditions };
             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(dataToSave));
         }
+
+        function applyTheme() {
+            if (state.theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        window.toggleTheme = function() {
+            state.theme = state.theme === 'dark' ? 'light' : 'dark';
+            applyTheme();
+            saveData();
+            renderApp(); // Re-render to update toggle UI and colors
+        };
 
         // ==========================================
         // 3. CALCULATIONS
@@ -206,33 +329,33 @@
             const actualHasF = state.conditions.hasF || calculatedHasF;
 
             // Honors Logic
-            let honors = "ไม่มีสิทธิ์ (Not Eligible)";
-            let honorsColor = "bg-[#FF6B6B] text-black";
+            let honors = "ไม่มีสิทธิ์";
+            let honorsColor = "text-gray-500 dark:text-white/60";
             
             if (!actualHasF && !state.conditions.hasRepeats && state.conditions.graduatesInTime) {
-                if (gpaRaw >= 3.75) { honors = "เกียรตินิยมอันดับ 1"; honorsColor = "bg-[#FFBE5D] text-black"; } 
-                else if (gpaRaw >= 3.25) { honors = "เกียรตินิยมอันดับ 2"; honorsColor = "bg-[#7495E8] text-black"; } 
-                else { honors = "เกณฑ์ปกติ"; honorsColor = "bg-gray-300 text-black"; }
+                if (gpaRaw >= 3.75) { honors = "เกียรตินิยมอันดับ 1"; honorsColor = "text-[#F59E0B] dark:text-[#FFBE5D]"; } 
+                else if (gpaRaw >= 3.25) { honors = "เกียรตินิยมอันดับ 2"; honorsColor = "text-[#3B82F6] dark:text-[#7495E8]"; } 
+                else { honors = "เกณฑ์ปกติ"; honorsColor = "text-gray-600 dark:text-white/80"; }
             } else {
-                if (actualHasF) honors += " (เคยติด F หรือ U)";
+                if (actualHasF) honors += " (เคยติด F/U)";
                 else if (state.conditions.hasRepeats) honors += " (มีรีเกรด)";
-                else if (!state.conditions.graduatesInTime) honors += " (เรียนเกินกำหนด)";
+                else if (!state.conditions.graduatesInTime) honors += " (เรียนเกิน)";
             }
 
             // Student Status Logic
-            let studentStatus = "ปกติ (Normal)";
-            let studentStatusColor = "text-[#34D399]";
+            let studentStatus = "ปกติ";
+            let studentStatusColor = "text-[#10B981] dark:text-[#34D399]";
             if (gpaCredits > 0) {
                 if (gpaRaw < 1.50) {
-                    studentStatus = "พ้นสภาพ (Dismissed)";
-                    studentStatusColor = "text-[#FF6B6B]";
+                    studentStatus = "พ้นสภาพ";
+                    studentStatusColor = "text-[#EF4444] dark:text-[#FF6B6B]";
                 } else if (gpaRaw >= 1.50 && gpaRaw < 2.00) {
-                    studentStatus = "วิทยาทัณฑ์ (Probation)";
-                    studentStatusColor = "text-[#FFBE5D]";
+                    studentStatus = "วิทยาทัณฑ์";
+                    studentStatusColor = "text-[#F59E0B] dark:text-[#FFAE3D]";
                 }
             } else {
-                studentStatus = "ยังไม่มีข้อมูล";
-                studentStatusColor = "text-gray-400";
+                studentStatus = "ไม่มีข้อมูล";
+                studentStatusColor = "text-gray-400 dark:text-white/50";
             }
 
             return { totalCredits, gpa, honors, honorsColor, studentStatus, studentStatusColor, categoryCredits };
@@ -284,9 +407,13 @@
         function renderNav() {
             const nav = document.getElementById('bottomNav');
             nav.innerHTML = `
-                ${getNavItem('dashboard', 'home', 'ภาพรวม')}
-                ${getNavItem('courses', 'list', 'รายวิชา')}
-                ${getNavItem('curriculum', 'book-open', 'หลักสูตร')}
+                ${getNavItem('dashboard', 'home', 'หน้าแรก')}
+                ${getNavItem('courses', 'layout-list', 'รายวิชา')}
+                <!-- Floating Add Button -->
+                <button onclick="openCourseModal()" class="glass-btn-warning flex items-center justify-center w-14 h-14 rounded-full -mt-10 mx-2 shadow-[0_4px_20px_rgba(255,190,93,0.4)]">
+                    <i data-lucide="plus" class="text-[#121420]" style="width: 28px; height: 28px;"></i>
+                </button>
+                ${getNavItem('curriculum', 'map', 'แผนการเรียน')}
                 ${getNavItem('settings', 'user', 'โปรไฟล์')}
             `;
         }
@@ -294,11 +421,12 @@
         function getNavItem(tabId, icon, label) {
             const isActive = state.activeTab === tabId;
             return `
-                <button onclick="changeTab('${tabId}')" class="flex flex-col items-center gap-1 w-16 transition-all ${isActive ? 'text-black -translate-y-2' : 'text-gray-400 hover:text-white'}">
-                    <div class="p-2 rounded-xl border-2 ${isActive ? 'border-black bg-[#FFBE5D] shadow-[2px_2px_0_0_#000]' : 'border-transparent'}">
-                        <i data-lucide="${icon}" class="${isActive ? 'text-black' : ''}"></i>
+                <button onclick="changeTab('${tabId}')" class="flex flex-col items-center gap-1 w-[4.5rem] py-1 transition-all ${isActive ? 'text-[#F59E0B] dark:text-[#FFBE5D] -translate-y-1' : 'text-gray-400 dark:text-white/50 hover:text-gray-600 dark:hover:text-white/80'}">
+                    <div class="relative">
+                        <i data-lucide="${icon}" style="width: 24px; height: 24px;" class="${isActive ? 'text-[#F59E0B] dark:text-[#FFBE5D] drop-shadow-[0_0_8px_rgba(255,190,93,0.5)]' : ''}"></i>
+                        ${isActive ? '<div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#F59E0B] dark:bg-[#FFBE5D]"></div>' : ''}
                     </div>
-                    <span class="text-[11px] font-black ${isActive ? 'opacity-100 text-white' : 'opacity-0'}">${label}</span>
+                    <span class="text-[10px] font-semibold mt-1 ${isActive ? 'opacity-100' : 'opacity-80'}">${label}</span>
                 </button>
             `;
         }
@@ -308,20 +436,20 @@
             renderApp();
         }
 
-        function getBrutalProgressBar(current, max, label, color) {
+        function getGlassProgressBar(current, max, label, colorHex) {
             const percent = Math.min((current / max) * 100, 100);
             const isComplete = current >= max;
             return `
                 <div class="mb-4 relative">
-                    <div class="flex justify-between font-bold text-sm mb-1 text-black">
+                    <div class="flex justify-between font-semibold text-sm mb-2 text-gray-700 dark:text-white/90">
                         <span class="flex items-center gap-2">
                             ${label}
-                            ${isComplete ? `<span class="bg-[#34D399] text-black text-[10px] px-2 py-0.5 border border-black rounded shadow-[1px_1px_0_0_#000]">ครบแล้ว ✅</span>` : ''}
+                            ${isComplete ? `<span class="bg-[#34D399]/20 text-[#10B981] dark:text-[#34D399] text-[10px] px-2 py-0.5 rounded-full border border-[#34D399]/30 shadow-[0_0_10px_rgba(52,211,153,0.1)]">ครบ ✅</span>` : ''}
                         </span>
-                        <span>${current} / ${max}</span>
+                        <span class="text-gray-500 dark:text-white/60">${current} / ${max}</span>
                     </div>
-                    <div class="w-full h-5 bg-gray-200 border-2 border-black rounded-md overflow-hidden relative shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                        <div class="h-full border-r-2 border-black transition-all duration-500" style="width: ${percent}%; background-color: ${isComplete ? '#34D399' : color}"></div>
+                    <div class="w-full h-3 bg-gray-200 dark:bg-black/40 rounded-full overflow-hidden relative border border-black/5 dark:border-white/5 box-inner-shadow">
+                        <div class="h-full rounded-full transition-all duration-700 ease-out" style="width: ${percent}%; background-color: ${isComplete ? '#10B981' : colorHex}; box-shadow: 0 0 10px ${isComplete ? '#10B981' : colorHex};"></div>
                     </div>
                 </div>
             `;
@@ -329,7 +457,11 @@
 
         function getGPAGraphHTML(data) {
             if (!data || data.length === 0) {
-                return `<div class="brutal-box p-6 text-center font-bold text-black border-dashed opacity-70">ยังไม่มีข้อมูลสำหรับสร้างกราฟ (เพิ่มวิชาเรียนก่อน)</div>`;
+                return `
+                <div class="glass-panel p-6 text-center text-gray-500 dark:text-white/50 border border-black/10 dark:border-white/10 flex flex-col items-center justify-center min-h-[200px]">
+                    <i data-lucide="bar-chart-2" style="width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.5;"></i>
+                    <p class="text-sm">เพิ่มรายวิชาเพื่อดูแนวโน้มผลการเรียน</p>
+                </div>`;
             }
 
             const width = 350; const height = 180;
@@ -343,28 +475,39 @@
 
             let gridLines = [0, 1, 2, 3, 4].map(val => `
                 <g>
-                    <line x1="${paddingX}" y1="${getY(val)}" x2="${Math.max(width, data.length * 80)}" y2="${getY(val)}" stroke="#000" stroke-width="1" stroke-dasharray="4 4" class="opacity-30" />
-                    <text x="${paddingX - 10}" y="${getY(val) + 4}" font-size="10" font-weight="900" text-anchor="end" fill="#000">${val.toFixed(1)}</text>
+                    <line x1="${paddingX}" y1="${getY(val)}" x2="${Math.max(width, data.length * 80)}" y2="${getY(val)}" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" class="text-black/10 dark:text-white/10" />
+                    <text x="${paddingX - 10}" y="${getY(val) + 4}" font-size="10" font-weight="600" text-anchor="end" fill="currentColor" class="text-gray-400 dark:text-white/50">${val.toFixed(1)}</text>
                 </g>
             `).join('');
 
             let dataPoints = points.map((p, i) => `
                 <g>
-                    <circle cx="${p.x}" cy="${p.y}" r="6" fill="#FFBE5D" stroke="#000" stroke-width="2" />
-                    <text x="${p.x}" y="${p.y - 12}" font-size="12" font-weight="900" text-anchor="middle" fill="#000" style="text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff">${p.gpa}</text>
-                    <text x="${p.x}" y="${height - 5}" font-size="10" font-weight="bold" text-anchor="middle" fill="#000">${p.label}</text>
+                    <!-- Outer glow -->
+                    <circle cx="${p.x}" cy="${p.y}" r="8" fill="currentColor" class="text-[#3B82F6]/30 dark:text-[#7495E8]/30" />
+                    <!-- Inner dot -->
+                    <circle cx="${p.x}" cy="${p.y}" r="4" fill="currentColor" class="text-[#3B82F6] dark:text-[#7495E8]" />
+                    
+                    <text x="${p.x}" y="${p.y - 14}" font-size="12" font-weight="bold" text-anchor="middle" fill="currentColor" class="text-gray-800 dark:text-white">${p.gpa}</text>
+                    <text x="${p.x}" y="${height - 5}" font-size="10" font-weight="500" text-anchor="middle" fill="currentColor" class="text-gray-500 dark:text-white/60">${p.label.replace('ปี ', 'Y').replace(' เทอม ', 'T')}</text>
                 </g>
             `).join('');
 
             return `
-                <div class="brutal-box p-2 pb-4 overflow-hidden bg-white">
-                    <div class="bg-[#272B4A] border-b-[3px] border-black p-2 -mx-2 -mt-2 mb-4 text-center">
-                        <h3 class="font-black text-[#FFBE5D] uppercase text-sm">แนวโน้มผลการเรียน (GPA Trend)</h3>
-                    </div>
-                    <div class="w-full overflow-x-auto custom-scrollbar">
+                <div class="glass-panel p-4 pb-6 overflow-hidden relative border border-black/5 dark:border-white/10">
+                    <h3 class="font-semibold text-gray-700 dark:text-white/80 text-sm mb-4 pl-2 flex items-center gap-2">
+                        <i data-lucide="trending-up" style="width:16px; height:16px;" class="text-[#3B82F6] dark:text-[#7495E8]"></i>
+                        แนวโน้มผลการเรียน
+                    </h3>
+                    <div class="w-full overflow-x-auto custom-scrollbar pb-2">
                         <svg viewBox="0 0 ${Math.max(width, data.length * 80)} ${height}" class="w-full h-auto min-w-[300px]">
                             ${gridLines}
-                            <path d="${pathD}" fill="none" stroke="#4A4585" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="${pathD}" fill="none" stroke="url(#lineGradient)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                            <defs>
+                                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#4A4585" />
+                                    <stop offset="100%" stop-color="${state.theme === 'dark' ? '#7495E8' : '#3B82F6'}" />
+                                </linearGradient>
+                            </defs>
                             ${dataPoints}
                         </svg>
                     </div>
@@ -378,59 +521,77 @@
             const termGroups = getTermGroups();
 
             const quickStats = [
-                { label: 'หน่วยกิตรวม', val: stats.totalCredits, max: TOTAL_REQ_CREDITS, color: 'bg-[#FFBE5D]' },
-                { label: 'ศึกษาทั่วไป', val: stats.categoryCredits.genEd.total, max: CURRICULUM.genEd.req, color: 'bg-[#7495E8]' },
-                { label: 'วิชาแกน/บังคับ', val: stats.categoryCredits.core + stats.categoryCredits.majorReq, max: CURRICULUM.core.req + CURRICULUM.majorReq.req, color: 'bg-[#A78BFA]' },
-                { label: 'ชีพเลือก/เสรี', val: stats.categoryCredits.majorElec + stats.categoryCredits.freeElec, max: CURRICULUM.majorElec.req + CURRICULUM.freeElec.req, color: 'bg-[#34D399]' },
+                { label: 'หน่วยกิตรวม', val: stats.totalCredits, max: TOTAL_REQ_CREDITS, colorClass: 'text-[#F59E0B] dark:text-[#FFBE5D]', bgClass: 'bg-[#FFBE5D]/20 dark:bg-[#FFBE5D]/10' },
+                { label: 'ศึกษาทั่วไป', val: stats.categoryCredits.genEd.total, max: CURRICULUM.genEd.req, colorClass: 'text-[#3B82F6] dark:text-[#7495E8]', bgClass: 'bg-[#7495E8]/20 dark:bg-[#7495E8]/10' },
+                { label: 'วิชาแกน/บังคับ', val: stats.categoryCredits.core + stats.categoryCredits.majorReq, max: CURRICULUM.core.req + CURRICULUM.majorReq.req, colorClass: 'text-[#8B5CF6] dark:text-[#A78BFA]', bgClass: 'bg-[#A78BFA]/20 dark:bg-[#A78BFA]/10' },
+                { label: 'ชีพเลือก/เสรี', val: stats.categoryCredits.majorElec + stats.categoryCredits.freeElec, max: CURRICULUM.majorElec.req + CURRICULUM.freeElec.req, colorClass: 'text-[#10B981] dark:text-[#34D399]', bgClass: 'bg-[#34D399]/20 dark:bg-[#34D399]/10' },
             ].map(item => `
-                <div class="brutal-box p-4 text-center ${item.color} relative overflow-hidden">
-                    ${item.val >= item.max ? `<div class="absolute -right-2 -top-2 bg-white text-black p-1 border-2 border-black rounded-full rotate-12 shadow-sm"><i data-lucide="check-circle" style="width:14px; height:14px;"></i></div>` : ''}
-                    <div class="text-3xl font-black text-black font-['Inter'] drop-shadow-[2px_2px_0_rgba(255,255,255,0.7)]">${item.val}</div>
-                    <div class="text-[11px] font-black text-black mt-2 bg-white border-2 border-black shadow-[2px_2px_0_0_#000] py-0.5 px-1 truncate">${item.label}</div>
+                <div class="glass-card p-4 relative overflow-hidden flex flex-col justify-center border border-black/5 dark:border-white/5">
+                    ${item.val >= item.max ? `<div class="absolute right-2 top-2"><i data-lucide="check-circle-2" class="text-[#10B981]/50 dark:text-[#34D399]/50" style="width:16px; height:16px;"></i></div>` : ''}
+                    <div class="text-3xl font-bold font-['Inter'] ${item.colorClass} drop-shadow-md mb-1">${item.val}</div>
+                    <div class="text-[11px] text-gray-500 dark:text-white/60 font-medium truncate">${item.label}</div>
+                    <div class="absolute -right-4 -bottom-4 w-16 h-16 rounded-full ${item.bgClass} blur-xl"></div>
                 </div>
             `).join('');
 
             return `
-                <div class="space-y-6 pb-24 animate-fade-in p-5">
-                    <!-- Profile & Status Card -->
-                    <div class="brutal-box p-4 bg-[#F4F4F0] flex justify-between items-center">
-                        <div>
-                            <h2 class="text-xl font-black text-[#272B4A]">${state.profile.firstName} ${state.profile.lastName}</h2>
-                            <p class="text-sm font-bold text-gray-600">ID: ${state.profile.studentId}</p>
+                <div class="space-y-6 pb-32 animate-fade-in p-6">
+                    
+                    <!-- Main Welcome Card -->
+                    <div class="glass-panel p-6 relative overflow-hidden flex flex-col justify-between min-h-[220px] border border-black/5 dark:border-white/10">
+                        <!-- Decorative background glow -->
+                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-[#4A4585]/20 dark:bg-[#4A4585]/40 rounded-full blur-3xl pointer-events-none"></div>
+                        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-[#3B82F6]/20 dark:bg-[#7495E8]/30 rounded-full blur-2xl pointer-events-none"></div>
+                        
+                        <div class="relative z-10 flex justify-between items-start">
+                            <div>
+                                <h2 class="text-lg font-semibold text-gray-800 dark:text-white">${state.profile.firstName}</h2>
+                                <p class="text-xs text-gray-500 dark:text-white/60 mt-0.5">ID: ${state.profile.studentId}</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-[10px] text-gray-400 dark:text-white/50 uppercase tracking-wider mb-1">Status</div>
+                                <div class="text-xs font-semibold px-2 py-1 rounded-md bg-white/50 dark:bg-black/30 border border-black/5 dark:border-white/5 ${stats.studentStatusColor}">${stats.studentStatus}</div>
+                            </div>
                         </div>
-                        <div class="text-right">
-                            <div class="text-xs font-bold text-gray-500 uppercase">สถานภาพ</div>
-                            <div class="font-black text-lg ${stats.studentStatusColor} text-shadow-sm">${stats.studentStatus}</div>
+
+                        <div class="relative z-10 mt-6 flex justify-between items-end">
+                            <div>
+                                <div class="text-[10px] text-gray-400 dark:text-white/60 uppercase tracking-wider mb-1">Cumulative GPA</div>
+                                <div class="text-6xl font-black font-['Inter'] text-transparent bg-clip-text bg-gradient-to-br from-gray-700 to-[#3B82F6] dark:from-white dark:to-[#7495E8] drop-shadow-sm tracking-tighter">
+                                    ${stats.gpa}
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end">
+                                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/60 dark:bg-black/40 border border-black/10 dark:border-white/10 text-[10px] font-medium ${stats.honorsColor} backdrop-blur-md">
+                                    <i data-lucide="award" style="width:14px; height:14px;"></i> ${stats.honors}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Main GPA Card -->
-                    <div class="brutal-box bg-[#272B4A] text-white relative overflow-hidden !border-4 p-6">
-                        <div class="absolute -right-6 -top-6 opacity-20 transform rotate-12">
-                            <i data-lucide="graduation-cap" style="width: 160px; height: 160px;"></i>
-                        </div>
-                        <div class="relative z-10">
-                            <h2 class="text-sm font-black uppercase tracking-wider mb-2 bg-[#FFBE5D] text-black inline-block px-2 py-1 border-2 border-black shadow-[2px_2px_0_0_#000]">เกรดเฉลี่ยรวม (GPAX)</h2>
-                            <div class="text-7xl font-black font-['Inter'] drop-shadow-[4px_4px_0_rgba(0,0,0,1)] tracking-tighter my-2 text-white">
-                                ${stats.gpa}
+                    <!-- AI Advisor Box -->
+                    <button onclick="handleGenerateAIAdvice()" ${state.courses.length === 0 ? 'disabled' : ''} class="w-full glass-card p-4 relative overflow-hidden group border border-[#F59E0B]/30 dark:border-[#FFBE5D]/30 shadow-[0_0_20px_rgba(245,158,11,0.1)] dark:shadow-[0_0_20px_rgba(255,190,93,0.1)] text-left flex items-center justify-between">
+                        <div class="absolute inset-0 bg-gradient-to-r from-[#F59E0B]/10 dark:from-[#FFBE5D]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="flex items-center gap-4 relative z-10">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFBE5D] to-[#FFAE3D] flex items-center justify-center shadow-lg">
+                                <i data-lucide="sparkles" class="text-[#121420]" style="width: 20px; height: 20px;"></i>
                             </div>
-                            <div class="mt-4 inline-flex items-center gap-2 px-3 py-2 border-2 border-black shadow-[2px_2px_0_0_#000] font-black text-sm ${stats.honorsColor}">
-                                <i data-lucide="trophy" style="width:16px; height:16px;"></i> ${stats.honors}
+                            <div>
+                                <h3 class="font-semibold text-gray-800 dark:text-white text-sm">วิเคราะห์เกรดด้วย AI</h3>
+                                <p class="text-xs text-gray-500 dark:text-white/60 mt-0.5">แนะนำสายอาชีพที่เหมาะกับคุณ</p>
                             </div>
                         </div>
-                    </div>
+                        <i data-lucide="chevron-right" class="text-gray-400 dark:text-white/40"></i>
+                    </button>
 
                     ${getGPAGraphHTML(termGroups)}
 
-                    <!-- AI Advisor Button -->
-                    <button onclick="handleGenerateAIAdvice()" ${state.courses.length === 0 ? 'disabled' : ''} class="brutal-btn w-full py-4 text-lg bg-gradient-to-r from-[#A78BFA] to-[#7495E8] text-black uppercase tracking-wider flex items-center justify-center gap-2">
-                        <i data-lucide="sparkles" class="${state.courses.length > 0 ? 'animate-pulse' : ''}"></i>
-                        ✨ วิเคราะห์ผลการเรียนด้วย AI
-                    </button>
-
                     <!-- Quick Stats Grid -->
-                    <div class="grid grid-cols-2 gap-4">
-                        ${quickStats}
+                    <div>
+                        <h3 class="font-semibold text-gray-700 dark:text-white/80 text-sm mb-3 pl-2">ภาพรวมหน่วยกิต</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            ${quickStats}
+                        </div>
                     </div>
                 </div>
             `;
@@ -440,38 +601,46 @@
             const termGroups = getTermGroups();
             
             let coursesList = termGroups.length === 0 ? `
-                <div class="text-center p-10 border-[4px] border-black border-dashed rounded-2xl font-black text-gray-500 bg-white">
-                    ยังไม่มีข้อมูล กด + เพื่อเพิ่มรายวิชา
+                <div class="glass-panel p-10 flex flex-col items-center justify-center text-center text-gray-500 dark:text-white/50 border border-black/5 dark:border-white/5">
+                    <i data-lucide="book-dashed" style="width: 48px; height: 48px; margin-bottom: 12px; opacity: 0.3;"></i>
+                    <p class="font-medium">ยังไม่มีข้อมูลรายวิชา</p>
+                    <p class="text-xs mt-1 opacity-70">กดปุ่ม + ด้านล่างเพื่อเพิ่ม</p>
                 </div>
             ` : termGroups.map(group => `
-                <div class="brutal-box overflow-hidden">
-                    <div class="bg-[#4A4585] text-white border-b-[3px] border-black p-3 flex justify-between items-center">
-                        <h3 class="font-black text-lg">${group.label}</h3>
-                        <div class="font-black bg-[#FFBE5D] text-black border-2 border-black px-3 py-1 shadow-[2px_2px_0_0_#000]">
-                            GPA เทอมนี้: ${group.gpa}
+                <div class="glass-panel overflow-hidden mb-6 border border-black/5 dark:border-white/5">
+                    <div class="bg-black/5 dark:bg-black/20 border-b border-black/10 dark:border-white/5 p-4 flex justify-between items-center backdrop-blur-md">
+                        <h3 class="font-semibold text-gray-800 dark:text-white">${group.label}</h3>
+                        <div class="text-xs font-medium bg-[#3B82F6]/10 dark:bg-[#7495E8]/20 text-[#3B82F6] dark:text-[#7495E8] px-2.5 py-1 rounded-full border border-[#3B82F6]/20 dark:border-[#7495E8]/30">
+                            GPA: ${group.gpa}
                         </div>
                     </div>
-                    <div class="p-3 space-y-3 bg-[#F4F4F0]">
+                    <div class="p-2 space-y-2">
                         ${group.courses.map(c => {
                             const catName = Object.values(CURRICULUM).find(cat => cat.id === c.category)?.name || '';
+                            let gradeColor = 'text-gray-800 dark:text-white';
+                            if(c.grade === 'A') gradeColor = 'text-[#F59E0B] dark:text-[#FFBE5D]';
+                            if(c.grade === 'F' || c.grade === 'U') gradeColor = 'text-[#EF4444] dark:text-[#FF6B6B]';
+                            
                             return `
-                                <div class="flex justify-between items-center border-[3px] border-black rounded-lg p-3 bg-white text-black shadow-[2px_2px_0_0_#000]">
-                                    <div class="flex-1 min-w-0 pr-2">
-                                        <div class="font-black text-base truncate">${c.code} ${c.name}</div>
-                                        <div class="text-xs font-bold mt-1 text-gray-600">
-                                            ${c.credits} นก. • ${catName}
+                                <div class="flex justify-between items-center glass-card p-3.5 hover:bg-black/5 dark:hover:bg-white/5 group border border-black/5 dark:border-white/5">
+                                    <div class="flex-1 min-w-0 pr-3">
+                                        <div class="font-semibold text-sm text-gray-800 dark:text-white/90 truncate">${c.code} ${c.name}</div>
+                                        <div class="text-[10px] text-gray-500 dark:text-white/50 mt-1 flex items-center gap-2">
+                                            <span>${c.credits} นก.</span>
+                                            <span class="w-1 h-1 rounded-full bg-gray-300 dark:bg-white/20"></span>
+                                            <span>${catName}</span>
                                         </div>
                                     </div>
-                                    <div class="flex items-center gap-3 border-l-[3px] border-black pl-3 ml-2">
-                                        <div class="font-black text-2xl w-8 text-center text-[#272B4A]" style="-webkit-text-stroke: 0.5px black;">
+                                    <div class="flex items-center gap-4 border-l border-black/10 dark:border-white/10 pl-4">
+                                        <div class="font-bold text-xl w-8 text-center font-['Inter'] ${gradeColor}">
                                             ${c.grade}
                                         </div>
-                                        <div class="flex flex-col gap-2">
-                                            <button onclick="openCourseModal('${c.id}')" class="bg-[#7495E8] text-black border-2 border-black p-1 rounded hover:bg-blue-400 shadow-[1px_1px_0_0_#000] active:shadow-none active:translate-y-[1px] active:translate-x-[1px]">
-                                                <i data-lucide="edit-2" style="width:14px; height:14px;"></i>
+                                        <div class="flex flex-col gap-1.5">
+                                            <button onclick="openCourseModal('${c.id}')" class="text-gray-400 dark:text-white/40 hover:text-[#3B82F6] dark:hover:text-[#7495E8] transition-colors p-1">
+                                                <i data-lucide="edit-3" style="width:16px; height:16px;"></i>
                                             </button>
-                                            <button onclick="removeCourse('${c.id}')" class="bg-[#FF6B6B] text-black border-2 border-black p-1 rounded hover:bg-red-400 shadow-[1px_1px_0_0_#000] active:shadow-none active:translate-y-[1px] active:translate-x-[1px]">
-                                                <i data-lucide="trash-2" style="width:14px; height:14px;"></i>
+                                            <button onclick="removeCourse('${c.id}')" class="text-gray-400 dark:text-white/40 hover:text-[#EF4444] dark:hover:text-[#FF6B6B] transition-colors p-1">
+                                                <i data-lucide="trash-2" style="width:16px; height:16px;"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -483,15 +652,12 @@
             `).join('');
 
             return `
-                <div class="space-y-6 pb-24 animate-fade-in p-5">
-                    <div class="flex justify-between items-center brutal-box bg-[#7495E8] p-4 text-black">
+                <div class="pb-32 animate-fade-in p-6">
+                    <div class="flex justify-between items-end mb-6 pl-2">
                         <div>
-                            <h2 class="text-2xl font-black">รายวิชาเรียน</h2>
-                            <p class="text-sm font-bold opacity-80">ทั้งหมด ${state.courses.length} วิชา</p>
+                            <h2 class="text-xl font-bold text-gray-800 dark:text-white">รายวิชาเรียน</h2>
+                            <p class="text-xs text-gray-500 dark:text-white/50 mt-1">ทั้งหมด ${state.courses.length} วิชา</p>
                         </div>
-                        <button onclick="openCourseModal()" class="brutal-btn bg-[#FFBE5D] px-3 py-2 flex items-center gap-2">
-                            <i data-lucide="plus"></i> <span class="hidden sm:inline">เพิ่มวิชา</span>
-                        </button>
                     </div>
                     ${coursesList}
                 </div>
@@ -502,31 +668,39 @@
             const stats = calculateStats();
             
             let genEdSubs = Object.entries(CURRICULUM.genEd.subs).map(([k, v]) => 
-                getBrutalProgressBar(stats.categoryCredits.genEd.subs[k] || 0, v.req, v.name, "#FFD185")
+                getGlassProgressBar(stats.categoryCredits.genEd.subs[k] || 0, v.req, v.name, state.theme === 'dark' ? "#FFAE3D" : "#F59E0B")
             ).join('');
 
+            const primaryColor = state.theme === 'dark' ? CURRICULUM.genEd.color : '#F59E0B';
+            const coreColor = state.theme === 'dark' ? CURRICULUM.core.color : '#3B82F6';
+            const majorReqColor = state.theme === 'dark' ? CURRICULUM.majorReq.color : '#8B5CF6';
+            const majorElecColor = state.theme === 'dark' ? CURRICULUM.majorElec.color : '#10B981';
+            const freeElecColor = state.theme === 'dark' ? CURRICULUM.freeElec.color : '#EC4899';
+
             return `
-                <div class="space-y-6 pb-24 animate-fade-in p-5">
-                    <h2 class="text-2xl font-black text-white mb-2 bg-[#4A4585] inline-block px-4 py-2 border-[4px] border-black shadow-[4px_4px_0_0_#000]">ตรวจสอบโครงสร้างหลักสูตร</h2>
+                <div class="space-y-6 pb-32 animate-fade-in p-6">
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4 pl-2">ตรวจสอบหลักสูตร</h2>
                     
-                    <div class="brutal-box p-5">
-                        ${getBrutalProgressBar(stats.categoryCredits.genEd.total, CURRICULUM.genEd.req, CURRICULUM.genEd.name, CURRICULUM.genEd.color)}
-                        <div class="pl-4 ml-2 border-l-[4px] border-black space-y-3 mt-4">
+                    <div class="glass-panel p-5 border border-black/5 dark:border-white/10">
+                        ${getGlassProgressBar(stats.categoryCredits.genEd.total, CURRICULUM.genEd.req, CURRICULUM.genEd.name, primaryColor)}
+                        <div class="pl-3 ml-1.5 border-l-2 border-black/10 dark:border-white/10 space-y-4 mt-5">
                             ${genEdSubs}
                         </div>
                     </div>
                     
-                    <div class="brutal-box p-5">
-                        ${getBrutalProgressBar(stats.categoryCredits.core, CURRICULUM.core.req, CURRICULUM.core.name, CURRICULUM.core.color)}
-                    </div>
-                    <div class="brutal-box p-5">
-                        ${getBrutalProgressBar(stats.categoryCredits.majorReq, CURRICULUM.majorReq.req, CURRICULUM.majorReq.name, CURRICULUM.majorReq.color)}
-                    </div>
-                    <div class="brutal-box p-5">
-                        ${getBrutalProgressBar(stats.categoryCredits.majorElec, CURRICULUM.majorElec.req, CURRICULUM.majorElec.name, CURRICULUM.majorElec.color)}
-                    </div>
-                    <div class="brutal-box p-5">
-                        ${getBrutalProgressBar(stats.categoryCredits.freeElec, CURRICULUM.freeElec.req, CURRICULUM.freeElec.name, CURRICULUM.freeElec.color)}
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="glass-panel p-5 border border-black/5 dark:border-white/10">
+                            ${getGlassProgressBar(stats.categoryCredits.core, CURRICULUM.core.req, CURRICULUM.core.name, coreColor)}
+                        </div>
+                        <div class="glass-panel p-5 border border-black/5 dark:border-white/10">
+                            ${getGlassProgressBar(stats.categoryCredits.majorReq, CURRICULUM.majorReq.req, CURRICULUM.majorReq.name, majorReqColor)}
+                        </div>
+                        <div class="glass-panel p-5 border border-black/5 dark:border-white/10">
+                            ${getGlassProgressBar(stats.categoryCredits.majorElec, CURRICULUM.majorElec.req, CURRICULUM.majorElec.name, majorElecColor)}
+                        </div>
+                        <div class="glass-panel p-5 border border-black/5 dark:border-white/10">
+                            ${getGlassProgressBar(stats.categoryCredits.freeElec, CURRICULUM.freeElec.req, CURRICULUM.freeElec.name, freeElecColor)}
+                        </div>
                     </div>
                 </div>
             `;
@@ -534,38 +708,68 @@
 
         function getSettingsHTML() {
             return `
-                <div class="space-y-6 pb-24 animate-fade-in p-5">
-                    <div class="brutal-box p-6">
-                        <h2 class="text-2xl font-black text-black mb-6 border-b-[4px] border-black pb-2">ตั้งค่าโปรไฟล์</h2>
-                        
-                        <div class="space-y-4 mb-8">
-                            <div>
-                                <label class="block font-black mb-1 uppercase text-sm">ชื่อ</label>
-                                <input type="text" class="brutal-input" value="${state.profile.firstName}" onchange="updateProfile('firstName', this.value)" />
+                <div class="space-y-6 pb-32 animate-fade-in p-6">
+                    <!-- Theme Toggle Section -->
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4 pl-2">การแสดงผล</h2>
+                    <div class="glass-panel p-4 mb-6 flex justify-between items-center border border-black/5 dark:border-white/10">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFBE5D] to-[#FFAE3D] flex items-center justify-center text-black">
+                                <i data-lucide="${state.theme === 'dark' ? 'moon' : 'sun'}" style="width:20px; height:20px;"></i>
                             </div>
                             <div>
-                                <label class="block font-black mb-1 uppercase text-sm">นามสกุล</label>
-                                <input type="text" class="brutal-input" value="${state.profile.lastName}" onchange="updateProfile('lastName', this.value)" />
-                            </div>
-                            <div>
-                                <label class="block font-black mb-1 uppercase text-sm">รหัสนักศึกษา</label>
-                                <input type="text" class="brutal-input" value="${state.profile.studentId}" onchange="updateProfile('studentId', this.value)" />
+                                <h3 class="font-semibold text-sm text-gray-800 dark:text-white">โหมดหน้าจอ</h3>
+                                <p class="text-xs text-gray-500 dark:text-white/50">${state.theme === 'dark' ? 'โหมดมืด (Dark Mode)' : 'โหมดสว่าง (Light Mode)'}</p>
                             </div>
                         </div>
+                        <button onclick="toggleTheme()" class="w-14 h-7 rounded-full transition-colors relative flex items-center shadow-inner ${state.theme === 'dark' ? 'bg-[#7495E8]' : 'bg-gray-300'}">
+                            <div class="absolute left-1 top-1 w-5 h-5 rounded-full bg-white transition-transform duration-300 shadow-sm ${state.theme === 'dark' ? 'translate-x-7' : 'translate-x-0'}"></div>
+                        </button>
+                    </div>
 
-                        <h2 class="text-2xl font-black text-black mb-6 border-b-[4px] border-black pb-2 pt-4">เงื่อนไขเกียรตินิยม</h2>
-                        <div class="space-y-4 mb-4">
-                            ${[
-                                { key: 'hasF', label: 'เคยติด F มาก่อนหรือไม่?' },
-                                { key: 'hasRepeats', label: 'เคยลงทะเบียนเรียนซ้ำ (รีเกรด) หรือไม่?' },
-                                { key: 'graduatesInTime', label: 'คาดว่าจะเรียนจบภายในเวลาที่กำหนด (4 ปี)' }
-                            ].map(item => `
-                                <label class="flex items-center gap-4 p-4 bg-[#F4F4F0] rounded-xl border-[3px] border-black shadow-[4px_4px_0_0_#000] cursor-pointer hover:-translate-y-1 transition-transform">
-                                    <input type="checkbox" ${state.conditions[item.key] ? 'checked' : ''} onchange="updateCondition('${item.key}', this.checked)" class="w-6 h-6 border-2 border-black rounded-none text-black focus:ring-black accent-[#4A4585]" />
-                                    <span class="font-bold text-black">${item.label}</span>
-                                </label>
-                            `).join('')}
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-white mt-8 mb-4 pl-2">ตั้งค่าโปรไฟล์</h2>
+                    
+                    <div class="glass-panel p-6 border border-black/5 dark:border-white/10">
+                        <div class="flex items-center gap-4 mb-6 pb-6 border-b border-black/10 dark:border-white/10">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-[#4A4585] to-[#7495E8] flex items-center justify-center text-2xl font-bold text-white shadow-lg">
+                                ${state.profile.firstName.charAt(0)}
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg text-gray-800 dark:text-white">${state.profile.firstName}</h3>
+                                <p class="text-xs text-gray-500 dark:text-white/50">ID: ${state.profile.studentId}</p>
+                            </div>
                         </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-500 dark:text-white/60 mb-1.5 uppercase">ชื่อ</label>
+                                <input type="text" class="glass-input" value="${state.profile.firstName}" onchange="updateProfile('firstName', this.value)" />
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-500 dark:text-white/60 mb-1.5 uppercase">นามสกุล</label>
+                                <input type="text" class="glass-input" value="${state.profile.lastName}" onchange="updateProfile('lastName', this.value)" />
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-500 dark:text-white/60 mb-1.5 uppercase">รหัสนักศึกษา</label>
+                                <input type="text" class="glass-input" value="${state.profile.studentId}" onchange="updateProfile('studentId', this.value)" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-white mt-8 mb-4 pl-2">เงื่อนไขเกียรตินิยม</h2>
+                    <div class="glass-panel p-2 border border-black/5 dark:border-white/10">
+                        ${[
+                            { key: 'hasF', label: 'เคยติด F หรือ U มาก่อนหรือไม่?' },
+                            { key: 'hasRepeats', label: 'เคยลงทะเบียนเรียนซ้ำ (รีเกรด)?' },
+                            { key: 'graduatesInTime', label: 'คาดว่าจะเรียนจบตามหลักสูตร (4 ปี)' }
+                        ].map(item => `
+                            <label class="flex items-center gap-4 p-4 hover:bg-black/5 dark:hover:bg-white/5 rounded-xl cursor-pointer transition-colors">
+                                <div class="relative flex items-center justify-center">
+                                    <input type="checkbox" ${state.conditions[item.key] ? 'checked' : ''} onchange="updateCondition('${item.key}', this.checked)" class="appearance-none w-5 h-5 border border-gray-400 dark:border-white/30 rounded-md checked:bg-[#3B82F6] dark:checked:bg-[#7495E8] checked:border-transparent transition-colors peer shadow-sm" />
+                                    <i data-lucide="check" class="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 pointer-events-none"></i>
+                                </div>
+                                <span class="font-medium text-sm text-gray-700 dark:text-white/90">${item.label}</span>
+                            </label>
+                        `).join('')}
                     </div>
                 </div>
             `;
@@ -575,6 +779,7 @@
         window.updateProfile = function(key, val) {
             state.profile[key] = val;
             saveData();
+            if (key !== 'firstName' && key !== 'lastName' && key !== 'studentId') renderApp();
         };
         
         window.updateCondition = function(key, val) {
@@ -657,7 +862,7 @@
                 dbGrouped[key].push({ ...c, originalIndex: idx });
             });
 
-            let dbOptions = `<option value="" disabled selected>-- คลิกเพื่อเลือกรายวิชา --</option>`;
+            let dbOptions = `<option value="" disabled selected>-- เลือกวิชา --</option>`;
             Object.entries(dbGrouped).forEach(([groupName, groupCourses]) => {
                 dbOptions += `<optgroup label="${groupName}">`;
                 groupCourses.forEach(c => {
@@ -667,87 +872,91 @@
             });
 
             container.innerHTML = `
-                <div class="flex justify-between items-center mb-6 pt-10 border-b-[4px] border-black pb-4 text-black">
-                    <h2 class="text-3xl font-black">${state.editingId ? 'แก้ไขวิชา' : 'เพิ่มวิชาใหม่'}</h2>
-                    <button onclick="closeCourseModal()" class="brutal-btn bg-[#FF6B6B] text-black px-4 py-2">ปิด X</button>
-                </div>
-                
-                ${!state.editingId ? `
-                <div class="brutal-box p-4 mb-6 bg-[#FFBE5D]">
-                    <label class="block font-black mb-2 uppercase text-black text-sm">⚡ เลือกวิชาจากแผนการศึกษา (Auto-fill)</label>
-                    <select class="brutal-input !bg-white" onchange="handleSelectFromDB(this.value)">
-                        ${dbOptions}
-                    </select>
-                    <p class="text-xs font-bold mt-2 text-black opacity-80">
-                        * ข้อมูลจะถูกกรอกลงในฟอร์มด้านล่างอัตโนมัติ กรุณาเลือก "เกรดที่ได้" แล้วกดบันทึก
-                    </p>
-                </div>` : ''}
-
-                <form onsubmit="submitCourseForm(event)" class="brutal-box p-6 space-y-5 text-black bg-white">
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="sm:col-span-1">
-                            <label class="block font-black mb-2 uppercase text-sm">รหัสวิชา</label>
-                            <input required type="text" placeholder="DDM101" class="brutal-input" value="${state.formData.code}" onchange="updateFormData('code', this.value.toUpperCase())" />
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="block font-black mb-2 uppercase text-sm">ชื่อวิชา</label>
-                            <input required type="text" placeholder="Introduction to Design" class="brutal-input" value="${state.formData.name}" onchange="updateFormData('name', this.value)" />
-                        </div>
+                <div class="w-full max-w-sm mx-auto mt-6">
+                    <div class="flex justify-between items-center mb-4 pl-2">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">${state.editingId ? 'แก้ไขวิชา' : 'เพิ่มรายวิชา'}</h2>
+                        <button onclick="closeCourseModal()" class="w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/20 transition-colors text-gray-800 dark:text-white">
+                            <i data-lucide="x" style="width:18px; height:18px;"></i>
+                        </button>
                     </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block font-black mb-2 text-sm">ปีการศึกษา</label>
-                            <select class="brutal-input" onchange="updateFormData('year', this.value)">
-                                ${[1,2,3,4,5,6,7,8].map(y => `<option value="${y}" ${state.formData.year == y ? 'selected' : ''}>ปีที่ ${y}</option>`).join('')}
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block font-black mb-2 text-sm">เทอม</label>
-                            <select class="brutal-input" onchange="updateFormData('term', this.value)">
-                                <option value="1" ${state.formData.term == '1' ? 'selected' : ''}>เทอม 1</option>
-                                <option value="2" ${state.formData.term == '2' ? 'selected' : ''}>เทอม 2</option>
-                                <option value="Summer" ${state.formData.term == 'Summer' ? 'selected' : ''}>Summer</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block font-black mb-2 text-sm">หน่วยกิต</label>
-                            <select class="brutal-input" onchange="updateFormData('credits', this.value)">
-                                ${[0,1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${state.formData.credits == n ? 'selected' : ''}>${n} นก.</option>`).join('')}
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block font-black mb-2 text-sm text-[#4A4585]">เกรดที่ได้</label>
-                            <select class="brutal-input !border-[#4A4585] !bg-[#F4F4F0]" onchange="updateFormData('grade', this.value)">
-                                ${ALL_GRADE_OPTIONS.map(g => `<option value="${g}" ${state.formData.grade == g ? 'selected' : ''}>${g === 'S' ? 'S (ผ่าน)' : g === 'U' ? 'U (ไม่ผ่าน)' : g}</option>`).join('')}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block font-black mb-2 text-sm">หมวดวิชา</label>
-                        <select class="brutal-input" onchange="updateFormData('category', this.value)">
-                            ${Object.values(CURRICULUM).map(cat => `<option value="${cat.id}" ${state.formData.category == cat.id ? 'selected' : ''}>${cat.name}</option>`).join('')}
-                        </select>
-                    </div>
-
-                    ${state.formData.category === 'genEd' ? `
-                    <div class="animate-fade-in p-4 bg-[#7495E8] border-[3px] border-black rounded-xl shadow-[4px_4px_0_0_#000] text-black">
-                        <label class="block font-black mb-2 text-sm">กลุ่มวิชาศึกษาทั่วไป</label>
-                        <select required class="brutal-input !bg-white" onchange="updateFormData('subCategory', this.value)">
-                            <option value="" disabled ${!state.formData.subCategory ? 'selected' : ''}>-- เลือกกลุ่มวิชา --</option>
-                            ${Object.entries(CURRICULUM.genEd.subs).map(([k, v]) => `<option value="${k}" ${state.formData.subCategory == k ? 'selected' : ''}>${v.name}</option>`).join('')}
+                    
+                    ${!state.editingId ? `
+                    <div class="glass-card p-4 mb-5 border-l-4 border-l-[#F59E0B] dark:border-l-[#FFBE5D] shadow-sm">
+                        <label class="block font-medium mb-2 text-[#F59E0B] dark:text-[#FFBE5D] text-xs uppercase tracking-wider flex items-center gap-1.5"><i data-lucide="zap" style="width:14px; height:14px;"></i> กรอกอัตโนมัติจากแผน</label>
+                        <select class="glass-input text-sm py-2.5" onchange="handleSelectFromDB(this.value)">
+                            ${dbOptions}
                         </select>
                     </div>` : ''}
 
-                    <button type="submit" class="brutal-btn w-full py-5 text-2xl bg-[#4A4585] text-white mt-6 uppercase tracking-widest">
-                        ${state.editingId ? 'บันทึกการแก้ไข' : 'เพิ่มรายวิชา'}
-                    </button>
-                </form>
+                    <form onsubmit="submitCourseForm(event)" class="glass-panel p-5 space-y-4 border border-black/5 dark:border-white/10 shadow-lg">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label class="block font-medium text-xs text-gray-500 dark:text-white/60 mb-1.5 uppercase">รหัสวิชา</label>
+                                <input required type="text" placeholder="DDM101" class="glass-input py-2.5" value="${state.formData.code}" onchange="updateFormData('code', this.value.toUpperCase())" />
+                            </div>
+                            <div>
+                                <label class="block font-medium text-xs text-gray-500 dark:text-white/60 mb-1.5 uppercase">ชื่อวิชา</label>
+                                <input required type="text" placeholder="ชื่อวิชา" class="glass-input py-2.5" value="${state.formData.name}" onchange="updateFormData('name', this.value)" />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-medium text-xs text-gray-500 dark:text-white/60 mb-1.5">ปีการศึกษา</label>
+                                <select class="glass-input py-2.5" onchange="updateFormData('year', this.value)">
+                                    ${[1,2,3,4,5,6,7,8].map(y => `<option value="${y}" ${state.formData.year == y ? 'selected' : ''}>ปีที่ ${y}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-xs text-gray-500 dark:text-white/60 mb-1.5">เทอม</label>
+                                <select class="glass-input py-2.5" onchange="updateFormData('term', this.value)">
+                                    <option value="1" ${state.formData.term == '1' ? 'selected' : ''}>เทอม 1</option>
+                                    <option value="2" ${state.formData.term == '2' ? 'selected' : ''}>เทอม 2</option>
+                                    <option value="Summer" ${state.formData.term == 'Summer' ? 'selected' : ''}>Summer</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-medium text-xs text-gray-500 dark:text-white/60 mb-1.5">หน่วยกิต</label>
+                                <select class="glass-input py-2.5" onchange="updateFormData('credits', this.value)">
+                                    ${[0,1,2,3,4,5,6,7,8].map(n => `<option value="${n}" ${state.formData.credits == n ? 'selected' : ''}>${n} นก.</option>`).join('')}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-xs text-[#3B82F6] dark:text-[#7495E8] mb-1.5">เกรดที่ได้</label>
+                                <select class="glass-input py-2.5 !border-[#3B82F6]/30 dark:!border-[#7495E8]/50 bg-white dark:!bg-[#7495E8]/10" onchange="updateFormData('grade', this.value)">
+                                    ${ALL_GRADE_OPTIONS.map(g => `<option value="${g}" ${state.formData.grade == g ? 'selected' : ''}>${g === 'S' ? 'S (ผ่าน)' : g === 'U' ? 'U (ไม่ผ่าน)' : g}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-medium text-xs text-gray-500 dark:text-white/60 mb-1.5">หมวดวิชา</label>
+                            <select class="glass-input py-2.5" onchange="updateFormData('category', this.value)">
+                                ${Object.values(CURRICULUM).map(cat => `<option value="${cat.id}" ${state.formData.category == cat.id ? 'selected' : ''}>${cat.name}</option>`).join('')}
+                            </select>
+                        </div>
+
+                        ${state.formData.category === 'genEd' ? `
+                        <div class="p-3 bg-[#F59E0B]/5 dark:bg-[#FFBE5D]/10 border border-[#F59E0B]/20 dark:border-[#FFBE5D]/20 rounded-xl mt-2">
+                            <label class="block font-medium text-xs text-[#F59E0B] dark:text-[#FFBE5D] mb-1.5">กลุ่มวิชาศึกษาทั่วไป</label>
+                            <select required class="glass-input py-2.5" onchange="updateFormData('subCategory', this.value)">
+                                <option value="" disabled ${!state.formData.subCategory ? 'selected' : ''}>-- เลือกกลุ่ม --</option>
+                                ${Object.entries(CURRICULUM.genEd.subs).map(([k, v]) => `<option value="${k}" ${state.formData.subCategory == k ? 'selected' : ''}>${v.name}</option>`).join('')}
+                            </select>
+                        </div>` : ''}
+
+                        <div class="pt-4">
+                            <button type="submit" class="glass-btn w-full py-3.5 text-sm uppercase tracking-wider">
+                                ${state.editingId ? 'บันทึกการแก้ไข' : 'เพิ่มลงในแอป'}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             `;
+            lucide.createIcons();
         }
 
         // --- GEMINI AI INTEGRATION ---
@@ -759,24 +968,23 @@
             const container = document.getElementById('aiModalContainer');
             container.classList.remove('hidden');
             
-            // Set loading state
             state.aiLoading = true;
             state.aiAdvice = "";
             renderAiModalContent();
 
             const stats = calculateStats();
-            const courseSummary = state.courses.map(c => `- ${c.name} (หน่วยกิต: ${c.credits}): เกรด ${c.grade}`).join('\n');
-            const prompt = `ช่วยวิเคราะห์ผลการเรียนของนักศึกษาคนนี้:\n\nเกรดเฉลี่ยสะสม (GPAX): ${stats.gpa}\nสถานะ: ${stats.studentStatus}\n\nรายวิชาที่เรียนไปแล้ว:\n${courseSummary || "ยังไม่ได้ลงทะเบียนเรียน"}\n\nคำสั่ง: จากรายวิชาและเกรดที่ได้ โปรดวิเคราะห์ว่านักศึกษาคนนี้มีความถนัดด้านใด (อิงจากวิชาที่ได้เกรดดี) มีจุดใดที่ควรระวังหรือพัฒนาเพิ่ม และแนะนำสายอาชีพ (Career Path) ด้าน Digital Design and Technology ที่เหมาะสมกับเขา`;
+            const courseSummary = state.courses.map(c => `- ${c.name} (${c.credits} นก.): เกรด ${c.grade}`).join('\n');
+            const prompt = `วิเคราะห์ผลการเรียนของนักศึกษาคนนี้:\n\nGPAX: ${stats.gpa}\nสถานะ: ${stats.studentStatus}\n\nวิชาที่เรียน:\n${courseSummary}\n\nโปรดวิเคราะห์ว่าถนัดด้านใด จุดที่ควรพัฒนา และแนะนำสายอาชีพ (Career Path) ด้าน Digital Design and Technology ที่เหมาะสม ตอบสั้นๆ กระชับ เป็นกันเอง ให้กำลังใจ (Markdown)`;
 
             try {
                 const apiKey = ""; // Gemini API key provided by environment
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
                 const payload = {
                     contents: [{ parts: [{ text: prompt }] }],
-                    systemInstruction: { parts: [{ text: "คุณคือผู้ให้คำปรึกษาทางวิชาการ (Academic Advisor) ที่เชี่ยวชาญด้าน Digital Design and Technology คุณมีหน้าที่วิเคราะห์ผลการเรียนของนักศึกษา ให้คำแนะนำเชิงบวก สรุปจุดแข็งจากวิชาที่ได้เกรดดี และแนะนำสายอาชีพที่เหมาะสมในวงการดิจิทัล (เช่น UX/UI, 3D, Developer, Graphic, IoT) ตอบด้วยภาษาไทยที่กระชับ เป็นกันเอง และให้กำลังใจ จัดรูปแบบด้วย Markdown" }] }
+                    systemInstruction: { parts: [{ text: "คุณคือ Academic Advisor สาขา Digital Design and Technology แนะนำสายอาชีพสั้นๆ กระชับ ให้อ่านง่ายบนมือถือ" }] }
                 };
 
-                let resultText = "ไม่สามารถวิเคราะห์ข้อมูลได้ในขณะนี้";
+                let resultText = "ไม่สามารถเชื่อมต่อ AI ได้ในขณะนี้";
                 const delays = [1000, 2000, 4000, 8000, 16000];
                 for (let attempt = 0; attempt <= delays.length; attempt++) {
                     try {
@@ -786,13 +994,13 @@
                         resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || resultText;
                         break;
                     } catch (error) {
-                        if (attempt === delays.length) throw new Error("การเชื่อมต่อระบบขัดข้อง โปรดลองใหม่อีกครั้งในภายหลัง");
+                        if (attempt === delays.length) throw new Error("Connection failed.");
                         await new Promise(resolve => setTimeout(resolve, delays[attempt]));
                     }
                 }
                 state.aiAdvice = resultText;
             } catch (err) {
-                state.aiAdvice = `**เกิดข้อผิดพลาด:** ${err.message}`;
+                state.aiAdvice = `**ข้อผิดพลาด:** ${err.message}`;
             } finally {
                 state.aiLoading = false;
                 renderAiModalContent();
@@ -805,38 +1013,45 @@
             let contentHTML = '';
             if (state.aiLoading) {
                 contentHTML = `
-                    <div class="flex flex-col items-center justify-center py-10 space-y-4 text-center">
-                        <i data-lucide="loader-2" style="width: 48px; height: 48px;" class="animate-spin text-[#4A4585]"></i>
-                        <p class="font-bold text-gray-700 animate-pulse">กำลังประมวลผลผลการเรียนของคุณ...</p>
+                    <div class="flex flex-col items-center justify-center py-12 space-y-5 text-center">
+                        <div class="relative w-16 h-16 flex items-center justify-center">
+                            <div class="absolute inset-0 border-4 border-t-[#F59E0B] dark:border-t-[#FFBE5D] border-r-[#FFAE3D] border-b-[#3B82F6] dark:border-b-[#7495E8] border-l-[#4A4585] rounded-full animate-spin"></div>
+                            <i data-lucide="sparkles" class="text-[#F59E0B] dark:text-[#FFBE5D]" style="width:24px; height:24px;"></i>
+                        </div>
+                        <p class="font-medium text-sm text-gray-600 dark:text-white/80 animate-pulse">AI กำลังวิเคราะห์ผลการเรียน...</p>
                     </div>
                 `;
             } else {
                 let formattedAdvice = state.aiAdvice.split('\n').map(line => {
-                    return `<p class="mb-2">${line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`;
+                    return `<p class="mb-2.5 text-[13px] leading-relaxed text-gray-700 dark:text-white/90">${line.replace(/\*\*(.*?)\*\*/g, `<strong class="text-[#F59E0B] dark:text-[#FFBE5D]">$1</strong>`)}</p>`;
                 }).join('');
 
                 contentHTML = `
-                    <div class="prose prose-sm max-w-none text-black whitespace-pre-wrap font-medium">
+                    <div class="prose prose-sm max-w-none">
                         ${formattedAdvice}
                     </div>
                 `;
             }
 
             container.innerHTML = `
-                <div class="brutal-box bg-white w-full max-w-md max-h-[85vh] flex flex-col overflow-hidden animate-fade-in">
-                    <div class="bg-[#A78BFA] p-4 border-b-[3px] border-black flex justify-between items-center">
-                        <h3 class="font-black text-xl flex items-center gap-2">
-                            <i data-lucide="sparkles"></i> AI Advisor
+                <div class="glass-panel w-full max-w-sm flex flex-col overflow-hidden relative border-t border-[#F59E0B]/30 dark:border-[#FFBE5D]/30 max-h-[85vh] shadow-2xl">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#F59E0B]/10 dark:bg-[#FFBE5D]/20 rounded-full blur-3xl"></div>
+                    <div class="p-5 border-b border-black/10 dark:border-white/10 flex justify-between items-center relative z-10">
+                        <h3 class="font-bold text-lg flex items-center gap-2 text-gray-800 dark:text-white">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#FFBE5D] to-[#FFAE3D] flex items-center justify-center shadow-sm">
+                                <i data-lucide="sparkles" class="text-[#121420]" style="width:16px; height:16px;"></i>
+                            </div>
+                            AI Advisor
                         </h3>
-                        <button onclick="closeAiModal()" class="bg-white border-2 border-black p-1 shadow-[2px_2px_0_0_#000] active:shadow-none active:translate-y-1 active:translate-x-1">
-                            <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                        <button onclick="closeAiModal()" class="w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/10 transition-colors text-gray-800 dark:text-white">
+                            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
                         </button>
                     </div>
-                    <div class="p-6 overflow-y-auto custom-scrollbar flex-1">
+                    <div class="p-6 overflow-y-auto custom-scrollbar flex-1 relative z-10 bg-white/40 dark:bg-transparent">
                         ${contentHTML}
                     </div>
-                    <div class="p-4 border-t-[3px] border-black bg-[#F4F4F0]">
-                        <button onclick="closeAiModal()" class="brutal-btn w-full py-3 bg-[#FFBE5D] text-black">
+                    <div class="p-4 border-t border-black/10 dark:border-white/10 relative z-10 bg-white/60 dark:bg-black/20">
+                        <button onclick="closeAiModal()" class="glass-btn w-full py-3">
                             เข้าใจแล้ว
                         </button>
                     </div>
