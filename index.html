@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyGradPath - Digital Design and Technology</title>
     
+    <!-- App Icons (สำหรับการตั้งเป็นไอคอนบนหน้าจอโฮมมือถือ) -->
+    <link rel="icon" href="image_edf26b.jpg" type="image/jpeg">
+    <link rel="apple-touch-icon" href="image_edf26b.jpg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MyGradPath">
+
     <!-- Tailwind CSS with Dark Mode Config -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -537,6 +544,11 @@
             return `
                 <div class="space-y-6 pb-32 animate-fade-in p-6">
                     
+                    <!-- App Icon Section -->
+                    <div class="flex justify-center -mb-2 mt-2">
+                        <img src="image_edf26b.jpg" alt="MGP App Icon" class="w-24 h-24 rounded-[1.25rem] shadow-[0_8px_16px_rgba(74,69,133,0.3)] border border-black/10 dark:border-white/10 object-cover" onerror="this.style.display='none'">
+                    </div>
+
                     <!-- Main Welcome Card -->
                     <div class="glass-panel p-6 relative overflow-hidden flex flex-col justify-between min-h-[220px] border border-black/5 dark:border-white/10">
                         <!-- Decorative background glow -->
